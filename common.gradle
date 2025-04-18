@@ -69,15 +69,14 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-
-            // Tambahin ini biar CI gak pakai signing
-            if (System.getenv("CI") != "true") {
-                signingConfig = signingConfigs.getByName("release")
-            }
+    getByName("release") {
+        minifyEnabled = false // FIX INI
+        if (System.getenv("CI") != "true") {
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+}
+
 
 
     dependenciesInfo {
