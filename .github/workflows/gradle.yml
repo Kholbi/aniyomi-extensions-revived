@@ -17,6 +17,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      CI_CHUNK_SIZE: 10
+
     permissions:
       contents: read
 
