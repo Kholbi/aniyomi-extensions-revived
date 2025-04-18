@@ -19,8 +19,8 @@ if (System.getenv("CI") != "true") {
 } else {
     // Running in CI (GitHub Actions)
 
-    val chunkSize = System.getenv("CI_CHUNK_SIZE").toIntOrNull() ?: 10
-    val chunk = System.getenv("CI_CHUNK_NUM").toIntOrNull() ?: 10
+    val chunkSize = System.getenv("CI_CHUNK_SIZE")?.let { it.toIntOrNull() } ?: 10
+    val chunk = System.getenv("CI_CHUNK_NUM")?.let { it.toIntOrNull() } ?: 0
 
 
     // Loads individual extensions
