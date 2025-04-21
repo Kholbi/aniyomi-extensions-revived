@@ -49,13 +49,12 @@ jobs:
     #
     # - name: Build with Gradle 8.9
     #   run: gradle build
-  env:
-  ENABLE_DEP_GRAPH: false
-
   dependency-submission:
-    
     if: env.ENABLE_DEP_GRAPH == 'true'
     runs-on: ubuntu-latest
+    env:
+      ENABLE_DEP_GRAPH: false  # 🟢 Ini ditaruh DI DALAM job
+
     permissions:
       contents: write
 
@@ -67,7 +66,5 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
-    # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
