@@ -13,6 +13,9 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  ENABLE_DEP_GRAPH: false  
+
 jobs:
   build:
 
@@ -50,11 +53,8 @@ jobs:
     # - name: Build with Gradle 8.9
     #   run: gradle build
   dependency-submission:
-    if: env.ENABLE_DEP_GRAPH == 'true'
+    if: ${{ env.ENABLE_DEP_GRAPH == 'true' }}  
     runs-on: ubuntu-latest
-    env:
-      ENABLE_DEP_GRAPH: false  # 🟢 Ini ditaruh DI DALAM job
-
     permissions:
       contents: write
 
