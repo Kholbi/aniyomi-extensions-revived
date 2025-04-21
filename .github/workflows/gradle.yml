@@ -49,9 +49,12 @@ jobs:
     #
     # - name: Build with Gradle 8.9
     #   run: gradle build
+  env:
+  ENABLE_DEP_GRAPH: false
 
   dependency-submission:
-
+    
+    if: env.ENABLE_DEP_GRAPH == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
