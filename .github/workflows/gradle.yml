@@ -11,10 +11,7 @@ on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
-
-env:
-  ENABLE_DEP_GRAPH: false  
+    branches: [ "master" ]  
 
 jobs:
   build:
@@ -22,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI_CHUNK_SIZE: 10
+      
 
     permissions:
       contents: read
@@ -52,19 +50,18 @@ jobs:
     #
     # - name: Build with Gradle 8.9
     #   run: gradle build
-  dependency-submission:
-    if: ${{ env.ENABLE_DEP_GRAPH == 'true' }}  
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
+  #dependency-submission:
+  #  runs-on: ubuntu-latest
+  #  permissions:
+  #    contents: write
+  #
+  #    steps:
+  #  - uses: actions/checkout@v4
+  #  - name: Set up JDK 17
+  #    uses: actions/setup-java@v4
+  #    with:
+  #      java-version: '17'
+  #      distribution: 'temurin'
+  #
+  #  - name: Generate and submit dependency graph
+  #    uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
