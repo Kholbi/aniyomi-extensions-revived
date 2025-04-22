@@ -2,17 +2,6 @@ apply(from = "repositories.gradle.kts")
 
 include(":core")
 
-val upJson = File(rootDir, "up.json")
-val upConfig = Json.parseToJsonElement(upJson.readText()).jsonObject
-
-val extPath = File(rootDir, upConfig["extPath"]!!.jsonPrimitive.content)
-val extName = Regex("""extName\s*=\s*['"](.+?)['"]""")
-    .find(File(extPath, "build.gradle").readText())
-    ?.groupValues?.get(1) ?: "proDir"
-
-include(":$extName")
-project(":$extName").projectDir = extPath //Change if need Builds
-
 // Load all modules under /lib
 File(rootDir, "lib").eachDir { include("lib:${it.name}") }
 
