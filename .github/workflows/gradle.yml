@@ -40,11 +40,14 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew :proDir:assembleRelease
     
-    - name: Upload APK
+    - name: Upload Missav APK
       uses: actions/upload-artifact@v4
       with:
         name: missav-apk
-        path: src/*.apk
+        path: '**/missav/build/outputs/apk/release/*.apk'
+
+    - name: Check built APKs
+      run: find . -name "*.apk"
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
