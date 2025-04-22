@@ -55,7 +55,7 @@ jobs:
     - name: Build with Gradle Wrapper
       run: 
         if [ "${{ steps.config.outputs.is_ext }}" = "true" ]; then
-          ./gradlew ":${{ steps.extname.outputs.ext_name }}:assembleRelease"
+          ./gradlew :proDir:assembleRelease
         else
           ./gradlew build
         fi
