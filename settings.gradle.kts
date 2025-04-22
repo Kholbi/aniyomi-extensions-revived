@@ -2,6 +2,9 @@ apply(from = "repositories.gradle.kts")
 
 include(":core")
 
+include(":proDir")
+project(":proDir").projectDir = file("src/all/missav") //Change if need Build
+
 // Load all modules under /lib
 File(rootDir, "lib").eachDir { include("lib:${it.name}") }
 
