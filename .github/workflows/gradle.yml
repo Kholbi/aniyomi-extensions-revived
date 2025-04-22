@@ -49,11 +49,11 @@ jobs:
       id: extname
       run: |
         EXT_PATH=${{ steps.config.outputs.ext_path }}
-        EXT_NAME=$(grep "extName" src/$EXT_PATH/build.gradle | cut -d"'" -f2)
+        EXT_NAME=$(grep "extName" $EXT_PATH/build.gradle | cut -d"'" -f2)
         echo "ext_name=$EXT_NAME" >> $GITHUB_OUTPUT
 
     - name: Build with Gradle Wrapper
-      run:
+      run:  
           ./gradlew :${{ steps.extname.outputs.ext_name }}:assembleRelease
     
     - name: Upload APK
