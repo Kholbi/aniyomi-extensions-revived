@@ -54,12 +54,12 @@ jobs:
 
     - name: Build with Gradle Wrapper if true ext
       if: steps.extname.outputs.is_ext == 'true'
-      run: 
+      run: |
           ./gradlew :proDir:assembleRelease
 
     - name: Build with Gradle Wrapper if false ext
       if: steps.extname.outputs.is_ext == 'false'
-      run: 
+      run: |
           ./gradlew build
     
     - name: Upload APK
