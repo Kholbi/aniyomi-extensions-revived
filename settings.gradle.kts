@@ -2,8 +2,13 @@ apply(from = "repositories.gradle.kts")
 
 include(":core")
 
-include(":proDir")
-project(":proDir").projectDir = file("src/all/missav") //Change if need Build
+val extPath = File(rootDir, "src/all/missav")
+val extName = Regex("""extName\s*=\s*['"](.+?)['"]""")
+    .find(File(extPath, "build.gradle").readText())
+    ?.groupValues?.get(1) ?: "missav"
+
+include(":$extName")
+project(":$extName").projectDir = extPath //Change if need Builds
 
 // Load all modules under /lib
 File(rootDir, "lib").eachDir { include("lib:${it.name}") }
