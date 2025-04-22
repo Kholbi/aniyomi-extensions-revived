@@ -37,21 +37,34 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
+    - name: Get extension config from up.json
+      id: extconfig
+      run: |
+        echo "EXT_PATH=$(jq -r .extPath up.json)" >> $GITHUB_ENV
+        echo "IS_EXT=$(jq -r .isExt up.json)" >> $GITHUB_ENV
+        echo "ext_path=$EXT_PATH" >> $GITHUB_OUTPUT
+        echo "is_ext=$IS_EXT" >> $GITHUB_OUTPUT
+
     - name: Get extName from build.gradle
       id: extname
       run: |
-        # Baca extName dari build.gradle (misal src/all/missav/build.gradle)
-        EXT_NAME=$(grep "extName" src/all/missav/build.gradle | cut -d"'" -f2)
+        EXT_PATH=${{ steps.config.outputs.ext_path }}
+        EXT_NAME=$(grep "extName" src/$EXT_PATH/build.gradle | cut -d"'" -f2)
         echo "ext_name=$EXT_NAME" >> $GITHUB_OUTPUT
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew ":${{ steps.extname.outputs.ext_name }}:assembleRelease"
+      run: 
+        if [ "${{ steps.config.outputs.is_ext }}" = "true" ]; then
+          ./gradlew ":${{ steps.extname.outputs.ext_name }}:assembleRelease"
+        else
+          ./gradlew build
+        fi
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.extname.outputs.ext_name }}-apk
-        path: "**/${{ steps.extname.outputs.ext_name }}/build/outputs/apk/release/*.apk"
+        path: "/${{ steps.extname.outputs.ext_path }}/build/outputs/apk/release/*.apk"
 
     - name: Check built APKs
       run: find . -name "*.apk"
@@ -65,18 +78,18 @@ jobs:
     #
     # - name: Build with Gradle 8.9
     #   run: gradle build
-  #dependency-submission:
-  #  runs-on: ubuntu-latest
-  #  permissions:
-  #    contents: write
-  #
-  #    steps:
-  #  - uses: actions/checkout@v4
-  #  - name: Set up JDK 17
-  #    uses: actions/setup-java@v4
-  #    with:
-  #      java-version: '17'
-  #      distribution: 'temurin'
-  #
-  #  - name: Generate and submit dependency graph
-  #    uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
+  dependency-submission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+  
+      steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+  
+    - name: Generate and submit dependency graph
+      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582

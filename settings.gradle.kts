@@ -1,11 +1,19 @@
+import java.io.File
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+
 apply(from = "repositories.gradle.kts")
 
 include(":core")
 
-val extPath = File(rootDir, "src/all/missav")
+val upJson = File(rootDir, "up.json")
+val upConfig = Json.parseToJsonElement(upJson.readText()).jsonObject
+
+val extPath = File(rootDir, upConfig["extPath"]!!.jsonPrimitive.content)
 val extName = Regex("""extName\s*=\s*['"](.+?)['"]""")
     .find(File(extPath, "build.gradle").readText())
-    ?.groupValues?.get(1) ?: "missav"
+    ?.groupValues?.get(1) ?: "proDir"
 
 include(":$extName")
 project(":$extName").projectDir = extPath //Change if need Builds
