@@ -52,13 +52,15 @@ jobs:
         EXT_NAME=$(grep "extName" src/$EXT_PATH/build.gradle | cut -d"'" -f2)
         echo "ext_name=$EXT_NAME" >> $GITHUB_OUTPUT
 
-    - name: Build with Gradle Wrapper
+    - name: Build with Gradle Wrapper if true ext
+      if: steps.extname.outputs.is_ext == 'true'
       run: 
-        if [ "${{ steps.config.outputs.is_ext }}" = "true" ]; then
           ./gradlew :proDir:assembleRelease
-        else
+
+    - name: Build with Gradle Wrapper if false ext
+      if: steps.extname.outputs.is_ext == 'false'
+      run: 
           ./gradlew build
-        fi
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
